@@ -49,10 +49,11 @@ $showMore = $totalGenres > $initialGenreCount;
                 <?php foreach (array_slice($genres, 0, $initialGenreCount) as $genre): ?>
                     <button class="filter-btn"><?php echo $genre['genreName']; ?></button>
                 <?php endforeach; ?>
+                
+                <?php if ($showMore): ?>
+                    <button id="load-more-btn" class="btn">Load More</button>
+                <?php endif; ?>
             </div>
-            <?php if ($showMore): ?>
-                <button id="load-more-btn" class="btn">Load More</button>
-            <?php endif; ?>
         </div>
 
         <div class="sort-dropdown">
@@ -113,6 +114,7 @@ $showMore = $totalGenres > $initialGenreCount;
 
         function displayGenres() {
             genreButtons.innerHTML = '';
+
             const displayedGenres = genres.slice(0, displayedGenresCount);
             displayedGenres.forEach(genre => {
                 const button = document.createElement('button');
@@ -120,18 +122,19 @@ $showMore = $totalGenres > $initialGenreCount;
                 button.textContent = genre.genreName;
                 genreButtons.appendChild(button);
             });
+
+            genreButtons.appendChild(loadMoreBtn);
+
+            loadMoreBtn.textContent = (displayedGenresCount < genres.length) ? "Load More" : "Load Less";
         }
 
         loadMoreBtn.addEventListener('click', function() {
             if (displayedGenresCount < genres.length) {
                 displayedGenresCount = genres.length;
-                displayGenres();
-                this.textContent = "Load Less";
             } else {
                 displayedGenresCount = <?php echo $initialGenreCount; ?>;
-                displayGenres();
-                this.textContent = "Load More";
             }
+            displayGenres();
         });
 
         displayGenres();

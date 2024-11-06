@@ -67,9 +67,11 @@ body {
 }
 
 .filter-buttons {
-    display: grid;
-    grid-template-columns: repeat(9, 1fr);
+    display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
+    max-width: 100%;
+    align-items: center;
 }
 
 .filter-btn {
@@ -82,10 +84,40 @@ body {
     font-size: 0.9rem;
     font-weight: bold;
     transition: background-color 0.2s;
+    white-space: nowrap;
 }
 
 .filter-btn:hover {
     background-color: #e63333;
+}
+
+@media (max-width: 768px) {
+    .filter-buttons {
+        max-width: 90%;
+    }
+}
+
+#load-more-btn {
+    background-color: #fff;
+    color: #ff3c3c;
+    padding: 0.5rem 1rem;
+    border: 2px solid #ff3c3c;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.2s, color 0.2s;
+    white-space: nowrap;
+}
+
+#load-more-btn:hover {
+    background-color: #ff3c3c;
+    color: #fff;
+}
+
+#load-more-btn:active {
+    background-color: #e63333;
+    color: #fff;
 }
 
 .sort-dropdown label {
