@@ -172,6 +172,13 @@ body {
     color: #ff3c3c;
 }
 
+.price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #007BFF;
+    margin: 0.5rem 0;
+}
+
 .game-card p {
     font-size: 0.9rem;
     color: #555;

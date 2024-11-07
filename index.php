@@ -29,7 +29,7 @@ $showMore = $totalGenres > $initialGenreCount;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Store</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styles.css?">
 </head>
 <body>
 
@@ -74,6 +74,15 @@ $showMore = $totalGenres > $initialGenreCount;
                     <img src="<?php echo $product['picture']; ?>" alt="Game Thumbnail">
                     <div class="content">
                         <h2><?php echo $product['productName']; ?></h2>
+                        <h3 class="price">
+                            <?php
+                                if ($product['price'] == 0) {
+                                    echo 'Free';
+                                } else {
+                                    echo '$' . $product['price'];
+                                }
+                            ?>
+                        </h3>
                         <p>
                             <?php
                                 $description = $product['description'];
