@@ -150,35 +150,19 @@ $showMore = $totalGenres > $initialGenreCount;
     </script>
 
     <script>//Search JavaScript
-        document.getElementById('search-bar').addEventListener('input', function() {
-            const query = this.value;
+        const searchBar = document.getElementById('search-bar');
+        const gameGrid = document.querySelector('.game-grid');
 
-            if (query.length > 0) {
-                fetch(`search.php?query=${encodeURIComponent(query)}`)
-                    .then(response => response.json())
-                    .then(products => {
-                        const resultsContainer = document.getElementById('search-results');
-                        resultsContainer.innerHTML = '';
+        searchBar.addEventListener('input', () => {
+            const query = searchBar.value.trim();
 
-                        products.forEach(product => {
-                            const gameCard = document.createElement('div');
-                            gameCard.className = 'game-card';
-
-                            gameCard.innerHTML = `
-                                <img src="images/${product.picture}" alt="${product.productName}">
-                                <div class="content">
-                                    <h2>${product.productName}</h2>
-                                    <h3>${product.price > 0 ? '$' + product.price : 'Free'}</h3>
-                                    <p>${product.description.length > 150 ? product.description.substring(0, 150) + '...' : product.description}</p>
-                                </div>
-                            `;
-
-                            resultsContainer.appendChild(gameCard);
-                        });
-                    });
-            } else {
-                document.getElementById('search-results').innerHTML = '';
-            }
+            // Fetch search results
+            fetch(`search.php?query=${encodeURIComponent(query)}`)
+                .then(response => response.text())
+                .then(data => {
+                    gameGrid.innerHTML = data; // Populate game-grid with search results
+                })
+                .catch(error => console.error('Error:', error));
         });
     </script>
 

@@ -31,10 +31,14 @@ class Product extends Db {
         return $count['count'];
     }
 
-    public function searchProducts($searchTerm) {
-        $stmt = $this->pdo->prepare("SELECT * FROM products WHERE productName LIKE :searchTerm LIMIT 10");
-        $stmt->execute(['searchTerm' => "%$searchTerm%"]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }    
+    public function searchProductsByName($query) {
+        $sql = self::$connection->prepare("SELECT * FROM products WHERE productName LIKE ?");
+        $searchTerm = '%' . $query . '%';
+        $sql->bind_param("s", $searchTerm);
+        $sql->execute();
+        $result = $sql->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+    
 }
 ?>
