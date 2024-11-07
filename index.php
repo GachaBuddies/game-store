@@ -36,7 +36,7 @@ $showMore = $totalGenres > $initialGenreCount;
     <header class="navbar">
         <a href="index.php"><h1>Game Store</h1></a>
         <div class="navbar-right">
-            <input type="text" placeholder="Search games...">
+            <input type="text" id="search-bar" placeholder="Search games..." />
             <button class="btn">Cart</button>
             <button class="btn">Login</button>
             <button class="btn">Register</button>
@@ -68,10 +68,10 @@ $showMore = $totalGenres > $initialGenreCount;
         </div>
 
         <h2>Featured Games</h2>
-        <div class="game-grid">
+        <div id="search-results" class="game-grid">
             <?php foreach ($products as $product): ?>
                 <div class="game-card">
-                    <img src="<?php echo $product['picture']; ?>" alt="Game Thumbnail">
+                    <img src="images/<?php echo $product['picture']; ?>" alt="Game Thumbnail">
                     <div class="content">
                         <h2><?php echo $product['productName']; ?></h2>
                         <h3 class="price">
@@ -114,8 +114,8 @@ $showMore = $totalGenres > $initialGenreCount;
     <footer class="footer">
         <p>&copy; 2024 Game Store - Group 4. All rights reserved.</p>
     </footer>
-
-    <script>
+    
+    <script>//Genre JavaScript
         const genres = <?php echo json_encode($genres); ?>;
         let displayedGenresCount = <?php echo $initialGenreCount; ?>;
         const genreButtons = document.getElementById('genre-buttons');
@@ -147,6 +147,39 @@ $showMore = $totalGenres > $initialGenreCount;
         });
 
         displayGenres();
+    </script>
+
+    <script>//Search JavaScript
+        document.getElementById('search-bar').addEventListener('input', function() {
+            const query = this.value;
+
+            if (query.length > 0) {
+                fetch(`search.php?query=${encodeURIComponent(query)}`)
+                    .then(response => response.json())
+                    .then(products => {
+                        const resultsContainer = document.getElementById('search-results');
+                        resultsContainer.innerHTML = '';
+
+                        products.forEach(product => {
+                            const gameCard = document.createElement('div');
+                            gameCard.className = 'game-card';
+
+                            gameCard.innerHTML = `
+                                <img src="images/${product.picture}" alt="${product.productName}">
+                                <div class="content">
+                                    <h2>${product.productName}</h2>
+                                    <h3>${product.price > 0 ? '$' + product.price : 'Free'}</h3>
+                                    <p>${product.description.length > 150 ? product.description.substring(0, 150) + '...' : product.description}</p>
+                                </div>
+                            `;
+
+                            resultsContainer.appendChild(gameCard);
+                        });
+                    });
+            } else {
+                document.getElementById('search-results').innerHTML = '';
+            }
+        });
     </script>
 
 </body>

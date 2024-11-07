@@ -29,6 +29,12 @@ class Product extends Db {
         $count = $result->fetch_assoc();
     
         return $count['count'];
+    }
+
+    public function searchProducts($searchTerm) {
+        $stmt = $this->pdo->prepare("SELECT * FROM products WHERE productName LIKE :searchTerm LIMIT 10");
+        $stmt->execute(['searchTerm' => "%$searchTerm%"]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }    
 }
 ?>
