@@ -8,20 +8,25 @@ $genreModel = new Genre();
 $productsPerPage = 15;
 
 $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$currentPage = $currentPage < 1 ? 1 : $currentPage;
 $offset = ($currentPage - 1) * $productsPerPage;
 
-$products = $productModel->getAllProducts($offset, $productsPerPage);
-$genres = $genreModel->getAllGenres();
+$query = isset($_GET['query']) ? trim($_GET['query']) : '';
 
-$totalProducts = $productModel->getTotalProductsCount();
+if ($query === '') {
+    $products = $productModel->getAllProducts($offset, $productsPerPage);
+} else {
+    $products = $productModel->searchProductsByName($query);
+}
+
+$genres = $genreModel->getAllGenres();
+$totalProducts = $query === '' ? $productModel->getTotalProductsCount() : count($products);
 $totalPages = ceil($totalProducts / $productsPerPage);
 
 $initialGenreCount = 13;
 $totalGenres = count($genres);
 $showMore = $totalGenres > $initialGenreCount;
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -94,7 +99,8 @@ $showMore = $totalGenres > $initialGenreCount;
             <?php endforeach; ?>
         </div>
 
-        <div class="pagination">
+        <?php if ($totalProducts > $productsPerPage): ?> 
+        <div class="pagination"> 
             <?php if ($currentPage > 1): ?>
                 <a class="page-btn" href="?page=<?php echo $currentPage - 1; ?>">Previous</a>
             <?php endif; ?>
@@ -104,11 +110,12 @@ $showMore = $totalGenres > $initialGenreCount;
                     <?php echo $i; ?>
                 </a>
             <?php endfor; ?>
-
+            
             <?php if ($currentPage < $totalPages): ?>
                 <a class="page-btn" href="?page=<?php echo $currentPage + 1; ?>">Next</a>
             <?php endif; ?>
         </div>
+        <?php endif; ?>
     </main>
 
     <footer class="footer">
@@ -149,22 +156,61 @@ $showMore = $totalGenres > $initialGenreCount;
         displayGenres();
     </script>
 
-    <script>//Search JavaScript
-        const searchBar = document.getElementById('search-bar');
-        const gameGrid = document.querySelector('.game-grid');
+    <script>
+    const searchBar = document.getElementById('search-bar');
+    const gameGrid = document.querySelector('.game-grid');
 
-        searchBar.addEventListener('input', () => {
-            const query = searchBar.value.trim();
+    searchBar.addEventListener('input', () => {
+        const query = searchBar.value.trim();
+        const urlParams = new URLSearchParams(window.location.search);
 
-            // Fetch search results
-            fetch(`search.php?query=${encodeURIComponent(query)}`)
-                .then(response => response.text())
-                .then(data => {
-                    gameGrid.innerHTML = data; // Populate game-grid with search results
-                })
-                .catch(error => console.error('Error:', error));
-        });
+        if (query === "") {
+            urlParams.delete('query');
+            urlParams.set('page', 1);
+        } else {
+            urlParams.set('query', query);
+            urlParams.set('page', 1);
+        }
+
+        window.history.pushState({}, '', '?' + urlParams.toString());
+
+        fetch(`search.php?query=${encodeURIComponent(query)}&page=1`)
+            .then(response => response.text())
+            .then(data => {
+                gameGrid.innerHTML = data;
+                updatePagination(query, 1);
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
+    function updatePagination(query, currentPage = 1) {
+        fetch(`search.php?query=${encodeURIComponent(query)}&count=true`)
+            .then(response => response.json())
+            .then(data => {
+                const totalProducts = data.count;
+                const totalPages = Math.ceil(totalProducts / <?php echo $productsPerPage; ?>);
+
+                const paginationContainer = document.querySelector('.pagination');
+                paginationContainer.innerHTML = '';
+
+                if (totalProducts > <?php echo $productsPerPage; ?>) {
+                    if (currentPage > 1) {
+                        paginationContainer.innerHTML += `<a class="page-btn" href="?page=${currentPage - 1}">Previous</a>`;
+                    }
+
+                    for (let i = 1; i <= totalPages; i++) {
+                        paginationContainer.innerHTML += `<a class="page-btn ${i == currentPage ? 'active' : ''}" href="?page=${i}">${i}</a>`;
+                    }
+
+                    if (currentPage < totalPages) {
+                        paginationContainer.innerHTML += `<a class="page-btn" href="?page=${currentPage + 1}">Next</a>`;
+                    }
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
     </script>
+
 
 </body>
 </html>
