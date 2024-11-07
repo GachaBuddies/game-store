@@ -6,12 +6,13 @@
 }
 
 body {
-    background-color: #f2f2f2;
+    background: url(../images/background.jpg);
+    background-size: cover;
     color: #333;
 }
 
 .navbar {
-    background-color: #ff3c3c;
+    background: linear-gradient(#0110fc, #010fcc, #000a83, #000439, #000108);
     padding: 1rem;
     display: flex;
     justify-content: space-between;
@@ -49,8 +50,8 @@ body {
 }
 
 .btn {
-    background-color: #fff;
-    color: #ff3c3c;
+    background: #fff;
+    color: #0110fc;
     padding: 0.5rem 1rem;
     border: none;
     border-radius: 4px;
@@ -61,7 +62,7 @@ body {
 }
 
 .btn:hover {
-    background-color: #ff3c3c;
+    background: linear-gradient(#0110fc, #010fcc, #000a83, #000439, #000108);
     color: #fff;
 }
 
@@ -81,7 +82,7 @@ body {
 }
 
 .filter-btn {
-    background-color: #ff3c3c;
+    background: linear-gradient(#0110fc, #010fcc, #000a83, #000439, #000108);
     color: #fff;
     padding: 0.5rem 1rem;
     border: none;
@@ -104,10 +105,10 @@ body {
 }
 
 #load-more-btn {
-    background-color: #fff;
-    color: #ff3c3c;
+    background: #fff;
+    color: #0110fc;
     padding: 0.5rem 1rem;
-    border: 2px solid #ff3c3c;
+    border: 2px solid #0110fc;
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.9rem;
@@ -117,25 +118,34 @@ body {
 }
 
 #load-more-btn:hover {
-    background-color: #ff3c3c;
+    background: linear-gradient(#0110fc, #010fcc, #000a83, #000439, #000108);
     color: #fff;
 }
 
 #load-more-btn:active {
-    background-color: #e63333;
+    background: linear-gradient(#0110fc, #010fcc, #000a83, #000439, #000108);
     color: #fff;
 }
 
 .sort-dropdown label {
     font-weight: bold;
+    font-size: 1.2rem;
     margin-right: 0.5rem;
-    color: #333;
+    color: #FFD700;
 }
 
 .sort-dropdown select {
     padding: 0.5rem;
     border-radius: 4px;
     border: 1px solid #ccc;
+}
+
+.featured-games {
+    font-size: 2rem;
+    color: #FFD700;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
 }
 
 .container {
@@ -175,7 +185,7 @@ body {
 .game-card h2 {
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
-    color: #ff3c3c;
+    color: linear-gradient(#0110fc, #010fcc, #000a83, #000439, #000108);;
 }
 
 .price {
@@ -199,7 +209,7 @@ body {
 }
 
 .page-btn {
-    background-color: #ff3c3c;
+    background: linear-gradient(#0110fc, #010fcc, #000a83, #000439, #000108);
     color: #fff;
     padding: 0.5rem 1rem;
     border: none;
@@ -223,7 +233,7 @@ body {
 .footer {
     text-align: center;
     padding: 1rem;
-    background-color: #333;
+    background: linear-gradient(#0110fc, #010fcc, #000a83, #000439, #000108);
     color: #fff;
     font-size: 0.9rem;
     margin-top: 2rem;

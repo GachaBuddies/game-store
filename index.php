@@ -72,7 +72,7 @@ $showMore = $totalGenres > $initialGenreCount;
             </select>
         </div>
 
-        <h2>Featured Games</h2>
+        <h2 class="featured-games">Featured Games</h2>
         <div id="search-results" class="game-grid">
             <?php foreach ($products as $product): ?>
                 <div class="game-card">
