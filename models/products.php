@@ -39,6 +39,39 @@ class Product extends Db {
         $result = $sql->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+
+    public function searchProductsByNameAndGenre($query, $genre, $offset = 0, $limit = 15) {
+        $sql = self::$connection->prepare(
+            "SELECT p.* 
+             FROM products p
+             JOIN genre g ON p.genreID = g.genreID
+             WHERE p.productName LIKE ? AND g.genreName = ?
+             LIMIT ?, ?"
+        );
+        $searchTerm = '%' . $query . '%';
+        $sql->bind_param("ssii", $searchTerm, $genre, $offset, $limit);
+        $sql->execute();
+        $result = $sql->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
     
+    
+    public function searchProductsByNameAndGenreCount($query, $genre) {
+        $sql = "SELECT COUNT(*) as count FROM products WHERE productName LIKE ?";
+        $params = ["s", "%" . $query . "%"];
+        
+        if ($genre !== '') {
+            $sql .= " AND genre LIKE ?";
+            $params[] = "s";
+            $params[] = "%" . $genre . "%";
+        }
+    
+        $stmt = self::$connection->prepare($sql);
+        $stmt->bind_param(...$params);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $count = $result->fetch_assoc();
+        return $count['count'];
+    }    
 }
 ?>

@@ -1,27 +1,27 @@
-<?php
+    <?php
     require_once 'models/products.php';
     $productModel = new Product();
 
     $query = isset($_GET['query']) ? trim($_GET['query']) : '';
+    $genre = isset($_GET['genre']) ? trim($_GET['genre']) : '';
     $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     $productsPerPage = 15;
     $offset = ($currentPage - 1) * $productsPerPage;
 
     if (isset($_GET['count']) && $_GET['count'] == 'true') {
-        if ($query === '') {
+        if ($query === '' && $genre === '') {
             $count = $productModel->getTotalProductsCount();
         } else {
-            $products = $productModel->searchProductsByName($query);
-            $count = count($products);
+            $count = $productModel->searchProductsByNameAndGenreCount($query, $genre);
         }
         echo json_encode(['count' => $count]);
         exit;
     }
 
-    if ($query === '') {
+    if ($query === '' && $genre === '') {
         $products = $productModel->getAllProducts($offset, $productsPerPage);
     } else {
-        $products = $productModel->searchProductsByName($query, $offset, $productsPerPage);
+        $products = $productModel->searchProductsByNameAndGenre($query, $genre, $offset, $productsPerPage);
     }
 
     foreach ($products as $product) {

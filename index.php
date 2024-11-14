@@ -127,41 +127,95 @@ $showMore = $totalGenres > $initialGenreCount;
         let displayedGenresCount = <?php echo $initialGenreCount; ?>;
         const genreButtons = document.getElementById('genre-buttons');
         const loadMoreBtn = document.getElementById('load-more-btn');
+        const gameCards = document.querySelectorAll('.game-card');
 
         function displayGenres() {
             genreButtons.innerHTML = '';
-
             const displayedGenres = genres.slice(0, displayedGenresCount);
             displayedGenres.forEach(genre => {
                 const button = document.createElement('button');
                 button.className = 'filter-btn';
                 button.textContent = genre.genreName;
+                button.setAttribute('data-genre', genre.genreName);
                 genreButtons.appendChild(button);
             });
-
             genreButtons.appendChild(loadMoreBtn);
-
             loadMoreBtn.textContent = (displayedGenresCount < genres.length) ? "Load More" : "Load Less";
         }
 
         loadMoreBtn.addEventListener('click', function() {
-            if (displayedGenresCount < genres.length) {
-                displayedGenresCount = genres.length;
-            } else {
-                displayedGenresCount = <?php echo $initialGenreCount; ?>;
-            }
+            displayedGenresCount = (displayedGenresCount < genres.length) ? genres.length : <?php echo $initialGenreCount; ?>;
             displayGenres();
+            resetActiveFilter();
         });
 
+        function resetActiveFilter() {
+            document.querySelectorAll('.filter-btn.active').forEach(btn => btn.classList.remove('active'));
+            gameCards.forEach(card => card.style.display = '');
+        }
+
         displayGenres();
+
+        genreButtons.addEventListener('click', function(e) {
+            if (e.target.classList.contains('filter-btn')) {
+                const genre = e.target.getAttribute('data-genre');
+                const searchQuery = searchBar.value.trim();
+                
+                const isActive = e.target.classList.contains('active');
+
+                if (isActive) {
+                    e.target.classList.remove('active');
+                    const urlParams = new URLSearchParams(window.location.search);
+                    urlParams.delete('genre');
+                    window.history.pushState({}, '', '?' + urlParams.toString());
+
+                    resetActiveFilter();
+                    fetchResults();
+
+                    gameCards.forEach(card => card.style.display = '');
+                } else {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    if (genre) urlParams.set('genre', genre);
+                    if (searchQuery) urlParams.set('query', searchQuery);
+
+                    window.history.pushState({}, '', '?' + urlParams.toString());
+
+                    resetActiveFilter();
+                    document.querySelectorAll('.filter-btn.active').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    fetchResults();
+
+                    gameCards.forEach(card => {
+                        const cardGenres = card.getAttribute('data-genres').split(',');
+                        card.style.display = cardGenres.includes(genre) ? '' : 'none';
+                    });
+                }
+            }
+        });
+
+        function fetchResults() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get('query') || '';
+            const genre = urlParams.get('genre') || '';
+
+            fetch(`search.php?query=${encodeURIComponent(query)}&genre=${encodeURIComponent(genre)}&page=1`)
+                .then(response => response.text())
+                .then(data => {
+                    gameGrid.innerHTML = data;
+                    updatePagination(query, 1);
+                })
+                .catch(error => console.error('Error:', error));
+        }
     </script>
 
-    <script>
+    <script>//Searching JavaScript
     const searchBar = document.getElementById('search-bar');
     const gameGrid = document.querySelector('.game-grid');
 
     searchBar.addEventListener('input', () => {
         const query = searchBar.value.trim();
+        const selectedGenre = document.querySelector('.filter-btn.active')?.textContent || '';
         const urlParams = new URLSearchParams(window.location.search);
 
         if (query === "") {
@@ -172,9 +226,15 @@ $showMore = $totalGenres > $initialGenreCount;
             urlParams.set('page', 1);
         }
 
+        if (selectedGenre) {
+            urlParams.set('genre', selectedGenre);
+        } else {
+            urlParams.delete('genre');
+        }
+
         window.history.pushState({}, '', '?' + urlParams.toString());
 
-        fetch(`search.php?query=${encodeURIComponent(query)}&page=1`)
+        fetch(`search.php?query=${encodeURIComponent(query)}&genre=${encodeURIComponent(selectedGenre)}&page=1`)
             .then(response => response.text())
             .then(data => {
                 gameGrid.innerHTML = data;
