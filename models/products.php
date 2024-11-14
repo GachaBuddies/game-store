@@ -41,35 +41,51 @@ class Product extends Db {
     }
 
     public function searchProductsByNameAndGenre($query, $genre, $offset = 0, $limit = 15) {
-        $sql = self::$connection->prepare(
-            "SELECT p.* 
-             FROM products p
-             JOIN genre g ON p.genreID = g.genreID
-             WHERE p.productName LIKE ? AND g.genreName = ?
-             LIMIT ?, ?"
-        );
-        $searchTerm = '%' . $query . '%';
-        $sql->bind_param("ssii", $searchTerm, $genre, $offset, $limit);
+        if ($genre) {
+            $sql = self::$connection->prepare(
+                "SELECT p.* 
+                 FROM products p
+                 JOIN genre g ON p.genreID = g.genreID
+                 WHERE p.productName LIKE ? AND g.genreName = ?
+                 LIMIT ?, ?"
+            );
+            $searchTerm = '%' . $query . '%';
+            $sql->bind_param("ssii", $searchTerm, $genre, $offset, $limit);
+        } else {
+            $sql = self::$connection->prepare(
+                "SELECT * FROM products 
+                 WHERE productName LIKE ?
+                 LIMIT ?, ?"
+            );
+            $searchTerm = '%' . $query . '%';
+            $sql->bind_param("sii", $searchTerm, $offset, $limit);
+        }
         $sql->execute();
         $result = $sql->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
     
-    
     public function searchProductsByNameAndGenreCount($query, $genre) {
-        $sql = "SELECT COUNT(*) as count FROM products WHERE productName LIKE ?";
-        $params = ["s", "%" . $query . "%"];
-        
-        if ($genre !== '') {
-            $sql .= " AND genre LIKE ?";
-            $params[] = "s";
-            $params[] = "%" . $genre . "%";
+        if ($genre) {
+            $sql = self::$connection->prepare(
+                "SELECT COUNT(*) as count
+                 FROM products p
+                 JOIN genre g ON p.genreID = g.genreID
+                 WHERE p.productName LIKE ? AND g.genreName = ?"
+            );
+            $searchTerm = '%' . $query . '%';
+            $sql->bind_param("ss", $searchTerm, $genre);
+        } else {
+            $sql = self::$connection->prepare(
+                "SELECT COUNT(*) as count 
+                 FROM products 
+                 WHERE productName LIKE ?"
+            );
+            $searchTerm = '%' . $query . '%';
+            $sql->bind_param("s", $searchTerm);
         }
-    
-        $stmt = self::$connection->prepare($sql);
-        $stmt->bind_param(...$params);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $sql->execute();
+        $result = $sql->get_result();
         $count = $result->fetch_assoc();
         return $count['count'];
     }    

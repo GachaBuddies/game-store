@@ -1,4 +1,4 @@
-    <?php
+<?php
     require_once 'models/products.php';
     $productModel = new Product();
 
@@ -20,17 +20,19 @@
 
     if ($query === '' && $genre === '') {
         $products = $productModel->getAllProducts($offset, $productsPerPage);
+    } elseif ($genre === '') {
+        $products = $productModel->searchProductsByName($query);
     } else {
         $products = $productModel->searchProductsByNameAndGenre($query, $genre, $offset, $productsPerPage);
     }
 
     foreach ($products as $product) {
         echo '<div class="game-card">';
-        echo '<img src="images/' . htmlspecialchars($product['picture']) . '" alt="Game Thumbnail">';
+        echo '<img src="images/' . $product['picture'] . '" alt="Game Thumbnail">';
         echo '<div class="content">';
-        echo '<h2>' . htmlspecialchars($product['productName']) . '</h2>';
-        echo '<h3 class="price">' . ($product['price'] == 0 ? 'Free' : '$' . htmlspecialchars($product['price'])) . '</h3>';
-        echo '<p>' . substr(htmlspecialchars($product['description']), 0, 150) . '...</p>';
+        echo '<h2>' . $product['productName'] . '</h2>';
+        echo '<h3 class="price">' . ($product['price'] == 0 ? 'Free' : '$' . $product['price']) . '</h3>';
+        echo '<p>' . substr($product['description'], 0, 150) . '...</p>';
         echo '</div></div>';
     }
 ?>
