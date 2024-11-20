@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 30, 2024 at 03:12 PM
+-- Generation Time: Nov 20, 2024 at 12:41 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -41,7 +41,7 @@ CREATE TABLE `genre` (
 INSERT INTO `genre` (`genreID`, `genreName`) VALUES
 (1, 'Action'),
 (2, 'Adventure'),
-(3, 'Role-Playing Game (RPG)'),
+(3, 'RPG'),
 (4, 'Simulation'),
 (5, 'Strategy'),
 (6, 'Sports'),
@@ -153,7 +153,8 @@ ALTER TABLE `genre`
 -- Indexes for table `products`
 --
 ALTER TABLE `products`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `genreID` (`genreID`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -170,6 +171,16 @@ ALTER TABLE `genre`
 --
 ALTER TABLE `products`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `products`
+--
+ALTER TABLE `products`
+  ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`genreID`) REFERENCES `genre` (`genreID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

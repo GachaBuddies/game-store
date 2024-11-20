@@ -89,5 +89,18 @@ class Product extends Db {
         $count = $result->fetch_assoc();
         return $count['count'];
     }    
+
+    public function getProductById($id) {
+        $sql = self::$connection->prepare(
+            "SELECT p.*, g.genreName 
+             FROM products p
+             JOIN genre g ON p.genreID = g.genreID
+             WHERE p.id = ?"
+        );
+        $sql->bind_param("i", $id);
+        $sql->execute();
+        $result = $sql->get_result();
+        return $result->fetch_assoc();
+    }    
 }
 ?>
