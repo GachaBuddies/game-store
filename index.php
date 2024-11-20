@@ -75,27 +75,29 @@ $showMore = $totalGenres > $initialGenreCount;
         <h2 class="featured-games">Featured Games</h2>
         <div id="search-results" class="game-grid">
             <?php foreach ($products as $product): ?>
-                <div class="game-card">
-                    <img src="images/<?php echo $product['picture']; ?>" alt="Game Thumbnail">
-                    <div class="content">
-                        <h2><?php echo $product['productName']; ?></h2>
-                        <h3 class="price">
-                            <?php
-                                if ($product['price'] == 0) {
-                                    echo 'Free';
-                                } else {
-                                    echo '$' . $product['price'];
-                                }
-                            ?>
-                        </h3>
-                        <p>
-                            <?php
-                                $description = $product['description'];
-                                echo strlen($description) > 150 ? substr($description, 0, 150) . '...' : $description;
-                            ?>
-                        </p>
+                <a href="productdetail.php?id=<?php echo $product['id']; ?>" class="game-card-link">
+                    <div class="game-card">
+                        <img src="images/<?php echo $product['picture']; ?>" alt="<?php echo $product['productName']; ?> Thumbnail">
+                        <div class="content">
+                            <h2><?php echo $product['productName']; ?></h2>
+                            <h3 class="price">
+                                <?php
+                                    if ($product['price'] == 0) {
+                                        echo 'Free';
+                                    } else {
+                                        echo '$' . $product['price'];
+                                    }
+                                ?>
+                            </h3>
+                            <p>
+                                <?php
+                                    $description = $product['description'];
+                                    echo strlen($description) > 150 ? substr($description, 0, 150) . '...' : $description;
+                                ?>
+                            </p>
+                        </div>
                     </div>
-                </div>
+                </a>
             <?php endforeach; ?>
         </div>
 
