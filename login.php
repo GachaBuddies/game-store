@@ -1,18 +1,30 @@
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    header("Location: index.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Store Login</title>
     <link rel="stylesheet" href="css/loginStyles.css">
 </head>
+
 <body>
 
     <header class="navbar">
-        <a href="index.php"><h1>Game Store</h1></a>
+        <a href="index.php">
+            <h1>Game Store</h1>
+        </a>
         <div class="navbar-right">
-            <button class="btn">Login</button>
-            <button class="btn">Register</button>
+            <button class="btn" onclick="window.location.href='login.php';">Login</button>
+            <button class="btn" onclick="window.location.href='register.php';">Register</button>
         </div>
     </header>
 
@@ -39,4 +51,5 @@
     </footer>
 
 </body>
+
 </html>
