@@ -27,6 +27,7 @@
     }
 
     foreach ($products as $product) {
+        echo '<a href="productdetail.php?id=' . $product['id'] . '" class="game-card-link">';
         echo '<div class="game-card">';
         echo '<img src="images/' . $product['picture'] . '" alt="Game Thumbnail">';
         echo '<div class="content">';
@@ -34,5 +35,6 @@
         echo '<h3 class="price">' . ($product['price'] == 0 ? 'Free' : '$' . $product['price']) . '</h3>';
         echo '<p>' . substr($product['description'], 0, 150) . '...</p>';
         echo '</div></div>';
-    }
+        echo '</a>';
+    }    
 ?>
