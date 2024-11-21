@@ -229,27 +229,20 @@ $showMore = $totalGenres > $initialGenreCount;
 
     genreButtons.addEventListener('click', function(e) {
         if (e.target.classList.contains('filter-btn')) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+
             const genre = e.target.getAttribute('data-genre');
             const searchQuery = searchBar.value.trim();
 
-            const isActive = e.target.classList.contains('active');
+            e.target.classList.add('active');
 
-            if (isActive) {
-                e.target.classList.remove('active');
-                const urlParams = new URLSearchParams(window.location.search);
-                urlParams.delete('genre');
-                window.history.pushState({}, '', '?' + urlParams.toString());
+            const urlParams = new URLSearchParams(window.location.search);
+            if (genre) urlParams.set('genre', genre);
+            if (searchQuery) urlParams.set('query', searchQuery);
+            urlParams.set('page', 1);
+            window.history.pushState({}, '', '?' + urlParams.toString());
 
-                fetchResults(searchQuery, '', 1);
-            } else {
-                e.target.classList.add('active');
-                const urlParams = new URLSearchParams(window.location.search);
-                if (genre) urlParams.set('genre', genre);
-                if (searchQuery) urlParams.set('query', searchQuery);
-                window.history.pushState({}, '', '?' + urlParams.toString());
-
-                fetchResults(searchQuery, genre, 1);
-            }
+            fetchResults(searchQuery, genre, 1);
         }
     });
 
