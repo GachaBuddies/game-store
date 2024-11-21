@@ -7,9 +7,7 @@ class Product extends Db {
         $sql->bind_param("ii", $offset, $limit);
         $sql->execute();
         $result = $sql->get_result();
-        $products = $result->fetch_all(MYSQLI_ASSOC);
-    
-        return $products;
+        return $result->fetch_all(MYSQLI_ASSOC);
     }    
 
     public function getProductsByCategory($category) {
@@ -17,9 +15,7 @@ class Product extends Db {
         $sql->bind_param("s", $category);
         $sql->execute();
         $result = $sql->get_result();
-        $product = $result->fetch_all(MYSQLI_ASSOC);
-
-        return $product;
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 
     public function getTotalProductsCount() {
@@ -102,5 +98,38 @@ class Product extends Db {
         $result = $sql->get_result();
         return $result->fetch_assoc();
     }    
+
+    public function getMostPopularGame() {
+        $sql = self::$connection->prepare("SELECT * FROM products ORDER BY views DESC LIMIT 1");
+        $sql->execute();
+        $result = $sql->get_result();
+        return $result->fetch_assoc();
+    }
+
+    public function getNewestGameById() {
+        $sql = self::$connection->prepare("SELECT * FROM products ORDER BY id DESC LIMIT 1");
+        $sql->execute();
+        $result = $sql->get_result();
+        return $result->fetch_assoc();
+    }
+    
+    public function getTrendingGame() {
+        $sql = self::$connection->prepare("SELECT * FROM products ORDER BY rates DESC LIMIT 1");
+        $sql->execute();
+        $result = $sql->get_result();
+        return $result->fetch_assoc();
+    }
+
+    public function getRandomGames($limit) {
+        $sql = self::$connection->prepare(
+            "SELECT * FROM products 
+             ORDER BY RAND() 
+             LIMIT ?"
+        );
+        $sql->bind_param("i", $limit);
+        $sql->execute();
+        $result = $sql->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
 }
 ?>
