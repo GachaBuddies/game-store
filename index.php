@@ -228,21 +228,36 @@ $showMore = $totalGenres > $initialGenreCount;
     displayGenres();
 
     genreButtons.addEventListener('click', function(e) {
-        if (e.target.classList.contains('filter-btn')) {
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-
+        if (e.target.classList.contains('filter-btn') && !e.target.id.includes('load-more-btn')) {
+            const isActive = e.target.classList.contains('active');
             const genre = e.target.getAttribute('data-genre');
             const searchQuery = searchBar.value.trim();
 
-            e.target.classList.add('active');
+            if (isActive) {
+                e.target.classList.remove('active');
 
-            const urlParams = new URLSearchParams(window.location.search);
-            if (genre) urlParams.set('genre', genre);
-            if (searchQuery) urlParams.set('query', searchQuery);
-            urlParams.set('page', 1);
-            window.history.pushState({}, '', '?' + urlParams.toString());
+                const urlParams = new URLSearchParams(window.location.search);
+                urlParams.delete('genre');
+                if (searchQuery) {
+                    urlParams.set('query', searchQuery);
+                }
+                urlParams.set('page', 1);
+                window.history.pushState({}, '', '?' + urlParams.toString());
 
-            fetchResults(searchQuery, genre, 1);
+                fetchResults(searchQuery, '', 1);
+            } else {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+
+                e.target.classList.add('active');
+
+                const urlParams = new URLSearchParams(window.location.search);
+                if (genre) urlParams.set('genre', genre);
+                if (searchQuery) urlParams.set('query', searchQuery);
+                urlParams.set('page', 1);
+                window.history.pushState({}, '', '?' + urlParams.toString());
+
+                fetchResults(searchQuery, genre, 1);
+            }
         }
     });
 
