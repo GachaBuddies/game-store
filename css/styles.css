@@ -432,7 +432,7 @@ body {
     display: inline-block;
 }
 
-.btn-add-to-cart {
+.btn-add-to-cart, .btn-edit, .btn-remove {
     background: linear-gradient(#0110fc, #010fcc, #000a83, #000439, #000108);
     color: #fff;
     padding: 0.5rem 1rem;
@@ -444,7 +444,7 @@ body {
     transition: background-color 0.2s, color 0.2s;
 }
 
-.btn-add-to-cart:hover {
+.btn-add-to-cart:hover, .btn-edit:hover, .btn-remove:hover{
     background: #fff;
     color: #0110fc;
     border: 1px solid #000a83;
