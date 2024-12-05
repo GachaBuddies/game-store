@@ -131,5 +131,43 @@ class Product extends Db {
         $result = $sql->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+    
+    public function deleteProduct($id) {
+        $sql = self::$connection->prepare("DELETE FROM products WHERE id = ?");
+        $sql->bind_param("i", $id);
+        return $sql->execute();
+    }
+
+    public function createProduct($productName, $price, $summary, $description, $genreID, $pictureName, $views, $rates) {
+        $sql = self::$connection->prepare(
+            "INSERT INTO products (picture, productName, price, summary, description, genreID, views, rates) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+        );
+        $sql->bind_param("ssdssiis", $pictureName, $productName, $price, $summary, $description, $genreID, $views, $rates);
+        return $sql->execute();
+    }    
+    
+    public function getNextProductId() {
+        $sql = self::$connection->prepare("
+            SELECT MIN(t1.id + 1) AS nextId
+            FROM products t1
+            LEFT JOIN products t2 ON t1.id + 1 = t2.id
+            WHERE t2.id IS NULL
+        ");
+        $sql->execute();
+        $result = $sql->get_result();
+        $row = $result->fetch_assoc();
+        return $row['nextId'] ?? 1;
+    }
+
+    public function updateProduct($productID, $productName, $price, $summary, $description, $genreID, $pictureName) {
+        $sql = self::$connection->prepare(
+            "UPDATE products 
+             SET productName = ?, price = ?, summary = ?, description = ?, genreID = ?, picture = ? 
+             WHERE id = ?"
+        );
+        $sql->bind_param("sdssisi", $productName, $price, $summary, $description, $genreID, $pictureName, $productID);
+        return $sql->execute();
+    }    
 }
 ?>
