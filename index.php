@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 require_once 'models/products.php';
 require_once 'models/genre.php';
 
@@ -45,16 +47,23 @@ $showMore = $totalGenres > $initialGenreCount;
 </head>
 
 <body>
-
     <header class="navbar">
         <a href="index.php">
             <h1>Game Store</h1>
         </a>
         <div class="navbar-right">
             <input type="text" id="search-bar" placeholder="Search games..." />
-            <button class="btn">Cart</button>
+            <button class="btn" onclick="window.location.href='cart.php';">Cart</button>
+
+            <?php if (isset($_SESSION['user'])): ?>
+            <?php if ($_SESSION['user']['role'] == 'admin'): ?>
+            <button class="btn" onclick="window.location.href='create_product.php';">Create Product</button>
+            <?php endif; ?>
+            <button class="btn" onclick="window.location.href='logout.php';">Logout</button>
+            <?php else: ?>
             <button class="btn" onclick="window.location.href='login.php';">Login</button>
             <button class="btn" onclick="window.location.href='register.php';">Register</button>
+            <?php endif; ?>
         </div>
     </header>
 
@@ -127,23 +136,12 @@ $showMore = $totalGenres > $initialGenreCount;
             </div>
         </div>
 
-        <div class="sort-dropdown">
-            <label for="sort">Sort by:</label>
-            <select id="sort">
-                <option value="popular">Most Popular</option>
-                <option value="newest">Newest</option>
-                <option value="rating">Top Rated</option>
-                <option value="price_low_high">Price: Low to High</option>
-                <option value="price_high_low">Price: High to Low</option>
-            </select>
-        </div>
-
         <h2 class="featured-games">Featured Games</h2>
         <div id="search-results" class="game-grid">
             <?php foreach ($products as $product): ?>
             <a href="productdetail.php?id=<?php echo $product['id']; ?>" class="game-card-link">
                 <div class="game-card">
-                    <img src="images/<?php echo $product['picture']; ?>"
+                    <img src="images/<?php echo $product['picture']; ?>?t=<?php echo time(); ?>"
                         alt="<?php echo $product['productName']; ?> Thumbnail">
                     <div class="content">
                         <h2><?php echo $product['productName']; ?></h2>
@@ -157,10 +155,7 @@ $showMore = $totalGenres > $initialGenreCount;
                                 ?>
                         </h3>
                         <p>
-                            <?php
-                                    $description = $product['description'];
-                                    echo strlen($description) > 150 ? substr($description, 0, 150) . '...' : $description;
-                                ?>
+                            <?php echo $product['summary']; ?>
                         </p>
                     </div>
                 </div>
