@@ -60,7 +60,9 @@ $totalPrice = array_sum(array_column($cart, 'price'));
                 Total: $<?php echo number_format($totalPrice, 2); ?>
             </div>
             <div class="cart-actions">
-                <button class="btn-other">Checkout</button>
+                <form method="POST" action="clear_cart.php">
+                    <button type="submit" class="btn-other">Checkout</button>
+                </form>
                 <button onclick="window.location.href='index.php';" class="btn-other">Continue Shopping</a>
             </div>
         </div>
