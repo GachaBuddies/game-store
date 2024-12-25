@@ -48,7 +48,7 @@ class Genre extends Db
 
     public function getPaginatedGenres($limit, $offset)
     {
-        $query = "SELECT * FROM genre LIMIT ? OFFSET ?";
+        $query = "SELECT * FROM genre ORDER BY genreID DESC LIMIT ? OFFSET ?";
         $stmt = self::$connection->prepare($query);
         if ($stmt) {
             $stmt->bind_param("ii", $limit, $offset);
