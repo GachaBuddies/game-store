@@ -38,13 +38,13 @@ if (!$product) {
             <button class="btn" onclick="window.location.href='cart.php';">Cart</button>
 
             <?php if (isset($_SESSION['user'])): ?>
-            <?php if ($_SESSION['user']['role'] == 'admin'): ?>
-            <button class="btn" onclick="window.location.href='create_product.php';">Create Product</button>
-            <?php endif; ?>
-            <button class="btn" onclick="window.location.href='logout.php';">Logout</button>
+                <?php if ($_SESSION['user']['role'] == 'admin'): ?>
+                    <button class="btn" onclick="window.location.href='admin.php';">Product Manage</button>
+                <?php endif; ?>
+                <button class="btn" onclick="window.location.href='logout.php';">Logout</button>
             <?php else: ?>
-            <button class="btn" onclick="window.location.href='login.php';">Login</button>
-            <button class="btn" onclick="window.location.href='register.php';">Register</button>
+                <button class="btn" onclick="window.location.href='login.php';">Login</button>
+                <button class="btn" onclick="window.location.href='register.php';">Register</button>
             <?php endif; ?>
         </div>
     </header>
@@ -73,17 +73,6 @@ if (!$product) {
                     <input type="hidden" name="id" value="<?php echo $product['id']; ?>">
                     <button type="submit" name="add_to_cart" class="btn-add-to-cart">Add to Cart</button>
                 </form>
-
-                <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] == 'admin'): ?>
-                <div class="admin-actions">
-                    <button class="btn-edit"
-                        onclick="window.location.href='edit_product.php?id=<?php echo $product['id']; ?>'">Edit</button>
-                    <form method="POST" action="delete_product.php">
-                        <input type="hidden" name="id" value="<?php echo $product['id']; ?>">
-                        <button type="submit" class="btn-remove">Delete</button>
-                    </form>
-                </div>
-                <?php endif; ?>
             </div>
         </div>
     </main>
