@@ -200,8 +200,9 @@ class Product extends Db
     public function getPaginatedProducts($limit, $offset)
     {
         $query = "SELECT products.*, genre.genreName FROM products
-              LEFT JOIN genre ON products.genreID = genre.genreID
-              LIMIT ? OFFSET ?";
+                LEFT JOIN genre ON products.genreID = genre.genreID
+                ORDER BY products.id DESC
+                LIMIT ? OFFSET ?";
         $stmt = self::$connection->prepare($query);
         if ($stmt) {
             $stmt->bind_param("ii", $limit, $offset);
