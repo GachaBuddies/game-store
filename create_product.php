@@ -58,13 +58,13 @@ $genres = $genreModel->getAllGenres();
             <button class="btn" onclick="window.location.href='cart.php';">Cart</button>
 
             <?php if (isset($_SESSION['user'])): ?>
-            <?php if ($_SESSION['user']['role'] == 'admin'): ?>
-            <button class="btn" onclick="window.location.href='create_product.php';">Create Product</button>
-            <?php endif; ?>
-            <button class="btn" onclick="window.location.href='logout.php';">Logout</button>
+                <?php if ($_SESSION['user']['role'] == 'admin'): ?>
+                    <button class="btn" onclick="window.location.href='create_product.php';">Create Product</button>
+                <?php endif; ?>
+                <button class="btn" onclick="window.location.href='logout.php';">Logout</button>
             <?php else: ?>
-            <button class="btn" onclick="window.location.href='login.php';">Login</button>
-            <button class="btn" onclick="window.location.href='register.php';">Register</button>
+                <button class="btn" onclick="window.location.href='login.php';">Login</button>
+                <button class="btn" onclick="window.location.href='register.php';">Register</button>
             <?php endif; ?>
         </div>
     </header>
@@ -94,9 +94,9 @@ $genres = $genreModel->getAllGenres();
                 <select id="genre" name="genreID" required>
                     <option value="">Select Genre</option>
                     <?php foreach ($genres as $genre): ?>
-                    <option value="<?php echo $genre['genreID']; ?>">
-                        <?php echo $genre['genreName']; ?>
-                    </option>
+                        <option value="<?php echo $genre['genreID']; ?>">
+                            <?php echo $genre['genreName']; ?>
+                        </option>
                     <?php endforeach; ?>
                 </select>
             </div>
