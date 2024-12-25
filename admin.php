@@ -12,14 +12,12 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
 $productModel = new Product();
 $genreModel = new Genre();
 
-$genres = $genreModel->getAllGenres();
-$products = $productModel->getAllProductsWithGenre();
-
 $genresPerPage = 15;
 $productsPerPage = 15;
 
 $currentGenrePage = isset($_GET['genre_page']) ? (int)$_GET['genre_page'] : 1;
 $currentProductPage = isset($_GET['product_page']) ? (int)$_GET['product_page'] : 1;
+$activeTab = isset($_GET['active_tab']) ? $_GET['active_tab'] : 'genres';
 
 $genreOffset = ($currentGenrePage - 1) * $genresPerPage;
 $productOffset = ($currentProductPage - 1) * $productsPerPage;
@@ -93,7 +91,7 @@ $totalProductPages = ceil($totalProducts / $productsPerPage);
 
             <div class="pagination">
                 <?php for ($i = 1; $i <= $totalGenrePages; $i++): ?>
-                    <a class="page-btn" href="?genre_page=<?php echo $i; ?>&product_page=<?php echo $currentProductPage; ?>" class="<?php echo ($i == $currentGenrePage) ? 'active' : ''; ?>">
+                    <a class="page-btn" href="?genre_page=<?php echo $i; ?>&product_page=<?php echo $currentProductPage; ?>&active_tab=genres" class="<?php echo ($i == $currentGenrePage) ? 'active' : ''; ?>">
                         <?php echo $i; ?>
                     </a>
                 <?php endfor; ?>
@@ -134,7 +132,7 @@ $totalProductPages = ceil($totalProducts / $productsPerPage);
 
             <div class="pagination">
                 <?php for ($i = 1; $i <= $totalProductPages; $i++): ?>
-                    <a class="page-btn" href="?product_page=<?php echo $i; ?>&genre_page=<?php echo $currentGenrePage; ?>" class="<?php echo ($i == $currentProductPage) ? 'active' : ''; ?>">
+                    <a class="page-btn" href="?product_page=<?php echo $i; ?>&genre_page=<?php echo $currentGenrePage; ?>&active_tab=games" class="<?php echo ($i == $currentProductPage) ? 'active' : ''; ?>">
                         <?php echo $i; ?>
                     </a>
                 <?php endfor; ?>
@@ -145,6 +143,10 @@ $totalProductPages = ceil($totalProducts / $productsPerPage);
     </main>
 
     <script src="js/admin.js"></script>
+    <script>
+        const activeTab = '<?php echo $activeTab; ?>';
+        showTab(activeTab);
+    </script>
 </body>
 
 </html>
