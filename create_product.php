@@ -27,9 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $rates = rand(5, 10);
 
             if ($productModel->createProduct($productName, $price, $summary, $description, $genreID, $pictureName, $views, $rates)) {
-                header('Location: index.php');
+                header('Location: admin.php');
                 exit();
-            }
+            }            
         }
     }
 }

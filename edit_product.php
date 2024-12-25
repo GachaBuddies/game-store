@@ -44,9 +44,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($productModel->updateProduct($productID, $productName, $price, $summary, $description, $genreID, $pictureName)) {
-            header('Location: index.php');
+            header('Location: admin.php');
             exit();
-        }
+        }        
     }
 }
 ?>
