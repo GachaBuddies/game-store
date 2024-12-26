@@ -67,6 +67,7 @@ $totalProductPages = ceil($totalProducts / $productsPerPage);
 
         <section id="genres" class="tab-content">
             <h2>Manage Genres</h2>
+            <button onclick="addGenre();" class="btn-other">Add New Genre</button>
             <table border="1">
                 <thead>
                     <tr>
@@ -96,12 +97,13 @@ $totalProductPages = ceil($totalProducts / $productsPerPage);
                     </a>
                 <?php endfor; ?>
             </div>
-
-            <button onclick="addGenre();" class="btn-other">Add New Genre</button>
         </section>
 
         <section id="games" class="tab-content">
             <h2>Manage Games</h2>
+            <div>
+                <button onclick="addProduct()" class="btn-other">Add New Product</button>
+            </div>
             <table border="1">
                 <thead>
                     <tr>
@@ -137,8 +139,6 @@ $totalProductPages = ceil($totalProducts / $productsPerPage);
                     </a>
                 <?php endfor; ?>
             </div>
-
-            <button onclick="addProduct()" class="btn-other">Add New Product</button>
         </section>
     </main>
 
